@@ -1,20 +1,17 @@
 @echo off
-REM Run Vinyl Client
-REM Usage: run-client.bat [server-name] [directory-ip] [directory-port] [mode]
+REM Run Vinyl Client  
+REM Simple usage: run-client.bat [server-name] [mode]
+REM Uses sensible defaults: lookup mode, connects to localhost:8081
 
-if "%1"=="" (
-    echo Usage: run-client.bat ^<server-name^> [directory-ip] [directory-port] [mode]
-    echo Example: run-client.bat myserver.group1.pro2x localhost 8081 interactive
-    echo.
-    echo Modes: lookup, connect, message, interactive
-    echo Server name format: ^<string^>.group#.pro2[x^|y]
-    exit /b 1
-)
+set SERVER_NAME=%1
+set MODE=%2
+if "%SERVER_NAME%"=="" set SERVER_NAME=defaultserver.group1.pro2x
+if "%MODE%"=="" set MODE=lookup
 
 echo Starting Vinyl Client...
-echo Looking for server: %1
-echo Directory: %2:%3 (defaults: localhost:8081)
-echo Mode: %4 (default: lookup)
+echo Looking for server: %SERVER_NAME%
+echo Directory: localhost:8081
+echo Mode: %MODE%
 echo.
 
-java -cp "build\common;build\client" com.vinylsystem.client.VinylClient %*
+java -cp "build\common;build\client" com.vinylsystem.client.VinylClient %SERVER_NAME% localhost 8081 %MODE%

@@ -1,18 +1,14 @@
 @echo off
 REM Run Vinyl Server
-REM Usage: run-server.bat [server-name] [server-ip] [server-port] [directory-ip] [directory-port] [ttl]
+REM Simple usage: run-server.bat [server-name]
+REM Uses sensible defaults: localhost:9090, connects to localhost:8080
 
-if "%1"=="" (
-    echo Usage: run-server.bat ^<server-name^> ^<server-ip^> ^<server-port^> [directory-ip] [directory-port] [ttl]
-    echo Example: run-server.bat myserver.group1.pro2x 192.168.1.100 9090
-    echo.
-    echo Server name format: ^<string^>.group#.pro2[x^|y]
-    exit /b 1
-)
+set SERVER_NAME=%1
+if "%SERVER_NAME%"=="" set SERVER_NAME=defaultserver.group1.pro2x
 
-echo Starting Vinyl Server: %1
-echo Server IP: %2:%3
-echo Directory: %4:%5 (defaults: localhost:8080)
+echo Starting Vinyl Server: %SERVER_NAME%
+echo Server IP: localhost:9090
+echo Directory: localhost:8080
 echo.
 
-java -cp "build\common;build\server" com.vinylsystem.server.VinylServer %*
+java -cp "build\common;build\server" com.vinylsystem.server.VinylServer %SERVER_NAME% localhost 9090
