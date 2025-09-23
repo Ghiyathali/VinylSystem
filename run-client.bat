@@ -14,4 +14,4 @@ echo Directory: localhost:8081
 echo Mode: %MODE%
 echo.
 
-java -cp "build\common;build\client" com.vinylsystem.client.VinylClient %SERVER_NAME% localhost 8081 %MODE%
+java -cp "build" com.vinylsystem.client.VinylClient %SERVER_NAME% localhost 8081 %MODE%
