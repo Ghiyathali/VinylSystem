@@ -1,0 +1,11 @@
+{
+    "java.project.sourcePaths": [
+        "common/src/main/java",
+        "directory/src/main/java", 
+        "server/src/main/java",
+        "client/src/main/java"
+    ],
+    "java.project.outputPath": "build",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
