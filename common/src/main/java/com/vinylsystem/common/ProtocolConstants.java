@@ -19,6 +19,10 @@ public class ProtocolConstants {
     public static final String MSG_LOOKUP = "LOOKUP";
     public static final String MSG_RESPONSE = "RESPONSE";
     
+    // Music search message types
+    public static final String MSG_SEARCH_MUSIC = "SEARCH_MUSIC";
+    public static final String MSG_MUSIC_RESPONSE = "MUSIC_RESPONSE";
+    
     // Network settings
     public static final int MAX_MESSAGE_SIZE = 1024;
     public static final int SOCKET_TIMEOUT = 5000; // 5 seconds

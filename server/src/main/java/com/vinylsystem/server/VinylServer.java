@@ -3,6 +3,7 @@ package com.vinylsystem.server;
 import com.vinylsystem.common.*;
 import java.net.*;
 import java.io.*;
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +20,7 @@ public class VinylServer {
     private final int ttlSeconds;
     
     private final ScheduledExecutorService scheduler;
+    private final DiscogsApiService discogsApi;
     
     private ServerSocket serverSocket;
     private volatile boolean running = false;
@@ -33,6 +35,7 @@ public class VinylServer {
         this.ttlSeconds = ttlSeconds;
         
         this.scheduler = Executors.newScheduledThreadPool(2);
+        this.discogsApi = new DiscogsApiService();
     }
     
     public VinylServer(String serverName, String serverIP, int serverPort) {
@@ -228,8 +231,7 @@ public class VinylServer {
             while ((request = reader.readLine()) != null && running) {
                 System.out.println("Client request: " + request);
                 
-                // Echo back for now - implement vinyl-specific logic here
-                String response = "Echo from " + serverName + ": " + request;
+                String response = handleMusicRequest(request);
                 writer.println(response);
                 
                 System.out.println("Client response: " + response);
@@ -244,6 +246,58 @@ public class VinylServer {
             } catch (IOException e) {
                 System.err.println("Error closing client socket: " + e.getMessage());
             }
+        }
+    }
+    
+    /**
+     * Handle music search requests from clients
+     */
+    private String handleMusicRequest(String request) {
+        try {
+            // For simplicity, treat all requests as simple music searches
+            return processSimpleSearch(request);
+            
+        } catch (Exception e) {
+            System.err.println("Error processing music request: " + e.getMessage());
+            return "ERROR: Could not process music search request";
+        }
+    }
+    
+    /**
+     * Process simple text search queries
+     */
+    private String processSimpleSearch(String query) {
+        try {
+            System.out.println("Processing simple search for: " + query);
+            
+            // Search using Discogs API
+            List<MusicRelease> results = discogsApi.searchReleases(query, 3);
+            
+            // Create a simple text response for basic clients
+            StringBuilder response = new StringBuilder();
+            response.append("Music Search Results from ").append(serverName).append(":\n");
+            response.append("Query: ").append(query).append("\n");
+            response.append("Found ").append(results.size()).append(" vinyl records:\n");
+            
+            for (int i = 0; i < results.size(); i++) {
+                MusicRelease release = results.get(i);
+                response.append(String.format("%d. %s - %s (%s) [%s]\n", 
+                    i + 1,
+                    release.getArtist() != null ? release.getArtist() : "Unknown Artist",
+                    release.getTitle() != null ? release.getTitle() : "Unknown Title",
+                    release.getYear() != null ? release.getYear() : "Unknown Year",
+                    release.getFormat() != null ? release.getFormat() : "Vinyl"
+                ));
+            }
+            
+            if (results.isEmpty()) {
+                response.append("No vinyl records found for your search.\n");
+            }
+            
+            return response.toString();
+            
+        } catch (Exception e) {
+            return "Error searching for music: " + e.getMessage();
         }
     }
     

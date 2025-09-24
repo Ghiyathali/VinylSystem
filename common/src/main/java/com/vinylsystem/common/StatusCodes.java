@@ -5,8 +5,9 @@ package com.vinylsystem.common;
  */
 public class StatusCodes {
     public static final String SUCCESS = "000001";
-    public static final String INVALID_REQUEST = "000002";
-    public static final String SERVER_ERROR = "000003";
+    public static final String ERROR = "000002";
+    public static final String INVALID_REQUEST = "000003";
+    public static final String SERVER_ERROR = "000004";
     public static final String NOT_FOUND = "000100";
     
     // Additional status codes for various scenarios
